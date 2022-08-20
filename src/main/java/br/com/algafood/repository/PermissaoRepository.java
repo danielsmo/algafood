@@ -1,0 +1,13 @@
+package br.com.algafood.repository;
+
+import br.com.algafood.domain.model.Permissao;
+
+import java.util.List;
+
+public interface PermissaoRepository {
+
+    List<Permissao> listar();
+    Permissao buscar (Long id);
+    Permissao adicionar (Permissao permissao);
+    void remover();
+}

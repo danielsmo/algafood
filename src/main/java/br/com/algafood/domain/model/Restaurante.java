@@ -1,9 +1,6 @@
 package br.com.algafood.domain.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -16,7 +13,20 @@ public class Restaurante {
 
     private String nome;
 
+
     private BigDecimal taxaFrete;
+
+    @ManyToOne
+    private Cozinha cozinha;
+
+
+
+
+
+
+
+
+
 
     public Long getId() {
         return id;
