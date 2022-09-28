@@ -1,4 +1,4 @@
-package br.com.algafood.repository;
+package br.com.algafood.domain.repository;
 
 import br.com.algafood.domain.model.Cidade;
 

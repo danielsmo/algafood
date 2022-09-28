@@ -1,7 +1,8 @@
 package br.com.algafood.infrasctructure.repository;
 
 import br.com.algafood.domain.model.Cozinha;
-import br.com.algafood.repository.CozinhaRepository;
+import br.com.algafood.domain.repository.CozinhaRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,14 +29,18 @@ public class CozinhaRepositoryImp implements CozinhaRepository {
 
     @Override
     @Transactional
-    public Cozinha adicionar(Cozinha cozinha) {
+    public Cozinha salvar(Cozinha cozinha) {
         return manager.merge(cozinha);
     }
 
     @Override
     @Transactional
-    public void remover(Cozinha cozinha) {
-        cozinha = buscar(cozinha.getId());
+    public void remover(Long id) {
+        Cozinha cozinha = buscar(id);
+
+        if (cozinha == null){
+            throw new EmptyResultDataAccessException(1);
+        }
         manager.remove(cozinha);
 
     }

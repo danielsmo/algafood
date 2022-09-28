@@ -1,4 +1,4 @@
-package br.com.algafood.repository;
+package br.com.algafood.domain.repository;
 
 import br.com.algafood.domain.model.Estado;
 
@@ -8,6 +8,6 @@ public interface EstadoRepository {
 
     List<Estado> listar();
     Estado buscar (Long id);
-    Estado adicionar (Estado estado);
-    void remover(Estado estado);
+    Estado salvar (Estado estado);
+    void remover(Long estadoId);
 }

@@ -27,4 +27,16 @@ public class Cidade {
     public Estado getEstado() {
         return estado;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
 }

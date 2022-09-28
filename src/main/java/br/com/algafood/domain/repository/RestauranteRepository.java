@@ -1,4 +1,4 @@
-package br.com.algafood.repository;
+package br.com.algafood.domain.repository;
 
 import br.com.algafood.domain.model.Restaurante;
 
@@ -8,6 +8,6 @@ public interface RestauranteRepository {
 
     List<Restaurante> listar();
     Restaurante buscar (Long id);
-    Restaurante adicionar (Restaurante restaurante);
+    Restaurante salvar (Restaurante restaurante);
     void remover(Restaurante restaurante);
 }

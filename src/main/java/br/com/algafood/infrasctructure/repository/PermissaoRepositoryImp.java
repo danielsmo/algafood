@@ -1,9 +1,9 @@
 package br.com.algafood.infrasctructure.repository;
 
 import br.com.algafood.domain.model.Permissao;
-import br.com.algafood.repository.PermissaoRepository;
-import jdk.jshell.spi.ExecutionControl;
+import br.com.algafood.domain.repository.PermissaoRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -25,11 +25,13 @@ public class PermissaoRepositoryImp implements PermissaoRepository {
     }
 
     @Override
-    public Permissao adicionar(Permissao permissao) {
+    @Transactional
+    public Permissao salvar(Permissao permissao) {
         return manager.merge(permissao);
     }
 
     @Override
+    @Transactional
     public void remover(Permissao permissao) {
         permissao = buscar(permissao.getId());
         manager.remove(permissao);

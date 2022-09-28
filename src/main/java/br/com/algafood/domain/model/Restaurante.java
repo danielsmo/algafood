@@ -55,6 +55,14 @@ public class Restaurante {
         this.taxaFrete = taxaFrete;
     }
 
+    public Cozinha getCozinha() {
+        return cozinha;
+    }
+
+    public void setCozinha(Cozinha cozinha) {
+        this.cozinha = cozinha;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

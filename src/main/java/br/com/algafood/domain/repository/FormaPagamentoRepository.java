@@ -1,4 +1,4 @@
-package br.com.algafood.repository;
+package br.com.algafood.domain.repository;
 
 import br.com.algafood.domain.model.FormaPagamento;
 
@@ -10,7 +10,7 @@ public interface FormaPagamentoRepository {
 
     List<FormaPagamento> listar();
     FormaPagamento buscar (Long id);
-    FormaPagamento adicionar (FormaPagamento formaPagamento);
+    FormaPagamento salvar (FormaPagamento formaPagamento);
     void remover(FormaPagamento formaPagamento);
 
 }
