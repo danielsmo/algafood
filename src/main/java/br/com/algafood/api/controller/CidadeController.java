@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -23,17 +24,15 @@ public class CidadeController {
 
     @GetMapping
     public List<Cidade> listar(){
-        return cidadeRepository.listar();
+        return cidadeRepository.findAll();
     }
 
     @GetMapping("/{cidadeId}")
     public ResponseEntity<?> buscar(@PathVariable Long cidadeId){
 
-        Cidade cidade = cidadeRepository.buscar(cidadeId);
+        Cidade cidade = cidadeRepository.findById(cidadeId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        if (cidade == null){
-            return ResponseEntity.notFound().build();
-        }
 
         return ResponseEntity.ok().body(cidade);
 
@@ -58,11 +57,10 @@ public class CidadeController {
     @PutMapping("/{cidadeId}")
     public ResponseEntity<?> atualizar(@PathVariable Long cidadeId, @RequestBody Cidade cidade) {
 
-        Cidade cidadeAtual = cidadeRepository.buscar(cidadeId);
+        Cidade cidadeAtual = cidadeRepository.findById(cidadeId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        if (cidadeAtual == null) {
-            return ResponseEntity.notFound().build();
-        }
+
 
         BeanUtils.copyProperties(cidade, cidadeAtual,"id");
 
@@ -79,13 +77,12 @@ public class CidadeController {
     @DeleteMapping("/{cidadeId}")
     public ResponseEntity<?> excluir(@PathVariable Long cidadeId){
 
-        Cidade cidade = cidadeRepository.buscar(cidadeId);
+        Cidade cidade = cidadeRepository.findById(cidadeId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        if (cidade == null){
-            return ResponseEntity.notFound().build();
-        }
 
-        cidadeRepository.remover(cidade);
+
+        cidadeRepository.delete(cidade);
         return ResponseEntity.noContent().build();
 
 

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -25,18 +26,17 @@ public class EstadoController {
 
     @GetMapping
     public List<Estado> listar(){
-        return estadoRepository.listar();
+        return estadoRepository.findAll();
     }
 
 
     @GetMapping("/{estadoId}")
     public ResponseEntity<Estado> buscar(@PathVariable Long estadoId){
 
-        Estado estado = estadoRepository.buscar(estadoId);
+        Estado estado = estadoRepository.findById(estadoId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        if (estado == null){
-            return ResponseEntity.notFound().build();
-        }
+
         return ResponseEntity.ok().body(estado);
 
     }
@@ -45,7 +45,7 @@ public class EstadoController {
     @PostMapping
     public ResponseEntity<Estado> adicionar(@RequestBody Estado estado){
 
-        estadoRepository.salvar(estado);
+        estadoRepository.save(estado);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(estado);
 
@@ -55,11 +55,10 @@ public class EstadoController {
     @PutMapping("/{estadoId}")
     public ResponseEntity<?> atualizar(@PathVariable Long estadoId, @RequestBody Estado estado){
 
-        Estado estadoAtual = estadoRepository.buscar(estadoId);
+        Estado estadoAtual = estadoRepository.findById(estadoId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        if (estadoAtual == null){
-            return ResponseEntity.notFound().build();
-        }
+
 
         BeanUtils.copyProperties(estado,estadoAtual,"id");
 

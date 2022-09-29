@@ -11,6 +11,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class CozinhaController {
 
     @GetMapping
     public ResponseEntity<List> listar(){
-        List<Cozinha> cozinhas = cozinhaRepository.listar();
+        List<Cozinha> cozinhas = cozinhaRepository.findAll();
 
         return ResponseEntity.ok().body(cozinhas);
     }
@@ -34,11 +35,10 @@ public class CozinhaController {
     @GetMapping("/{cozinhaId}")
     public ResponseEntity<?> buscar(@PathVariable Long cozinhaId){
 
-        Cozinha cozinha = cozinhaRepository.buscar(cozinhaId);
+        Cozinha cozinha = cozinhaRepository.findById(cozinhaId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        if (cozinha == null){
-            return ResponseEntity.notFound().build();
-        }
+
         return ResponseEntity.ok().body(cozinha);
 
 
@@ -54,11 +54,8 @@ public class CozinhaController {
     }
     @PutMapping("/{cozinhaId}")
     public ResponseEntity<Cozinha> atualizar(@PathVariable Long cozinhaId, @RequestBody Cozinha cozinha){
-        Cozinha cozinhaAtual = cozinhaRepository.buscar(cozinhaId);
-
-        if (cozinhaAtual == null){
-            return ResponseEntity.notFound().build();
-        }
+        Cozinha cozinhaAtual = cozinhaRepository.findById(cozinhaId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         BeanUtils.copyProperties(cozinha,cozinhaAtual, "id");
         cadastroCozinhaService.salvar(cozinhaAtual);
