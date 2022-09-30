@@ -6,6 +6,7 @@ import br.com.algafood.domain.model.Estado;
 import br.com.algafood.domain.repository.CidadeRepository;
 import br.com.algafood.domain.repository.EstadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,7 +17,7 @@ public class CadastroCidadeService {
     @Autowired
     private EstadoRepository estadoRepository;
 
-    public Cidade salvar(Cidade cidade){
+    public Cidade salvar(Cidade cidade) {
 
         Estado estado = estadoRepository.findById(cidade.getEstado().getId()).orElseThrow(() ->
                 new EntidadeNaoEncontradaException(
@@ -29,9 +30,15 @@ public class CadastroCidadeService {
     }
 
 
-    public void excluir(Long cidadeId){
+    public void excluir(Long cidadeId) {
 
+        try {
+            cidadeRepository.deleteById(cidadeId);
+        } catch (EmptyResultDataAccessException e) {
+            throw new EntidadeNaoEncontradaException(
+                    String.format("Cidade de código %d não foi localizada", cidadeId));
 
+        }
 
 
     }

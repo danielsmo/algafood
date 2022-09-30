@@ -7,7 +7,6 @@ import br.com.algafood.domain.repository.CozinhaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,7 +15,7 @@ public class CadastroCozinhaService {
     @Autowired
     private CozinhaRepository cozinhaRepository;
 
-    public Cozinha salvar(Cozinha cozinha){
+    public Cozinha salvar(Cozinha cozinha) {
 
         return cozinhaRepository.save(cozinha);
 
@@ -28,13 +27,13 @@ public class CadastroCozinhaService {
 
         try {
             cozinhaRepository.deleteById(cozinhaId);
-        } catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             throw new EntidadeNaoEncontradaException(
-                    String.format("Cozinha de código %d não foi localizada",cozinhaId));
+                    String.format("Cozinha de código %d não foi localizada", cozinhaId));
 
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(
-                    String.format("Cozinha de código %d não pode ser removida pois está em uso",cozinhaId));
+                    String.format("Cozinha de código %d não pode ser removida pois está em uso", cozinhaId));
 
         }
     }

@@ -5,6 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface CozinhaRepository extends JpaRepository<Cozinha,Long> {
+public interface CozinhaRepository extends JpaRepository<Cozinha, Long> {
+
+    List<Cozinha> nome(String nome);
+
+    List<Cozinha> findByNome(String nome);
+
 
 }

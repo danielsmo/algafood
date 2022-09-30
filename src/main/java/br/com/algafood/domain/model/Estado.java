@@ -15,12 +15,12 @@ public class Estado {
         return id;
     }
 
-    public String getNome() {
-        return nome;
-    }
-
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
     }
 
     public void setNome(String nome) {

@@ -5,13 +5,11 @@ import br.com.algafood.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algafood.domain.model.Estado;
 import br.com.algafood.domain.repository.EstadoRepository;
 import br.com.algafood.domain.service.CadastroEstadoService;
-import org.apache.coyote.Response;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -25,16 +23,19 @@ public class EstadoController {
     private CadastroEstadoService cadastroEstadoService;
 
     @GetMapping
-    public List<Estado> listar(){
+    public List<Estado> listar() {
         return estadoRepository.findAll();
     }
 
 
     @GetMapping("/{estadoId}")
-    public ResponseEntity<Estado> buscar(@PathVariable Long estadoId){
+    public ResponseEntity<Estado> buscar(@PathVariable Long estadoId) {
 
-        Estado estado = estadoRepository.findById(estadoId).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Estado estado = estadoRepository.findById(estadoId).orElse(null);
+
+        if (estado == null) {
+            return ResponseEntity.notFound().build();
+        }
 
 
         return ResponseEntity.ok().body(estado);
@@ -43,7 +44,7 @@ public class EstadoController {
 
 
     @PostMapping
-    public ResponseEntity<Estado> adicionar(@RequestBody Estado estado){
+    public ResponseEntity<Estado> adicionar(@RequestBody Estado estado) {
 
         estadoRepository.save(estado);
 
@@ -53,14 +54,16 @@ public class EstadoController {
     }
 
     @PutMapping("/{estadoId}")
-    public ResponseEntity<?> atualizar(@PathVariable Long estadoId, @RequestBody Estado estado){
+    public ResponseEntity<?> atualizar(@PathVariable Long estadoId, @RequestBody Estado estado) {
 
-        Estado estadoAtual = estadoRepository.findById(estadoId).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Estado estadoAtual = estadoRepository.findById(estadoId).orElse(null);
+
+        if (estadoAtual == null) {
+            return ResponseEntity.notFound().build();
+        }
 
 
-
-        BeanUtils.copyProperties(estado,estadoAtual,"id");
+        BeanUtils.copyProperties(estado, estadoAtual, "id");
 
         cadastroEstadoService.salvar(estado);
 
@@ -71,14 +74,14 @@ public class EstadoController {
 
 
     @DeleteMapping("/{estadoId}")
-    public ResponseEntity<?> excluir(@PathVariable Long estadoId){
+    public ResponseEntity<?> excluir(@PathVariable Long estadoId) {
 
         try {
             cadastroEstadoService.excluir(estadoId);
             return ResponseEntity.noContent().build();
-        }catch (EntidadeNaoEncontradaException e){
+        } catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (EntidadeEmUsoException e){
+        } catch (EntidadeEmUsoException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
     }

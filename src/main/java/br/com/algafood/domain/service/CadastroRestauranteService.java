@@ -6,6 +6,7 @@ import br.com.algafood.domain.model.Restaurante;
 import br.com.algafood.domain.repository.CozinhaRepository;
 import br.com.algafood.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,12 +23,23 @@ public class CadastroRestauranteService {
 
         Cozinha cozinha = cozinhaRepository.findById(cozinhaId).orElseThrow(() ->
                 new EntidadeNaoEncontradaException(
-                        String.format("Cozinha com id %d não encontrada",cozinhaId)));
+                        String.format("Cozinha com id %d não encontrada", cozinhaId)));
 
         restaurante.setCozinha(cozinha);
 
         return restauranteRepository.save(restaurante);
 
 
+    }
+
+    public void excluir(Long restauranteId) {
+
+        try {
+            restauranteRepository.deleteById(restauranteId);
+        } catch (EmptyResultDataAccessException e) {
+            throw new EntidadeNaoEncontradaException(
+                    String.format("Restaurante de código %d não foi localizado", restauranteId));
+
+        }
     }
 }

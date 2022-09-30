@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -36,8 +35,11 @@ public class RestauranteController {
     @GetMapping("/{restauranteId}")
     public ResponseEntity<Restaurante> buscar(@PathVariable Long restauranteId) {
 
-        Restaurante restaurante = restauranteRepository.findById(restauranteId).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Restaurante restaurante = restauranteRepository.findById(restauranteId).orElse(null);
+
+        if (restaurante == null) {
+            return ResponseEntity.notFound().build();
+        }
 
 
         return ResponseEntity.ok(restaurante);
@@ -63,9 +65,11 @@ public class RestauranteController {
     public ResponseEntity<?> atualizar(@PathVariable Long restauranteId, @RequestBody Restaurante restaurante) {
 
 
-        Restaurante restauranteAtual = restauranteRepository.findById(restauranteId).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Restaurante restauranteAtual = restauranteRepository.findById(restauranteId).orElse(null);
 
+        if (restauranteAtual == null) {
+            return ResponseEntity.notFound().build();
+        }
 
         BeanUtils.copyProperties(restaurante, restauranteAtual, "id");
 
@@ -80,8 +84,11 @@ public class RestauranteController {
     @PatchMapping("/{restauranteId}")
     public ResponseEntity<?> atualizarParcial(@PathVariable Long restauranteId, @RequestBody Map<String, Object> campos) {
 
-        Restaurante restauranteAtual = restauranteRepository.findById(restauranteId).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Restaurante restauranteAtual = restauranteRepository.findById(restauranteId).orElse(null);
+
+        if (restauranteAtual == null) {
+            return ResponseEntity.notFound().build();
+        }
 
         merge(campos, restauranteAtual);
 
@@ -95,12 +102,12 @@ public class RestauranteController {
     @DeleteMapping("/{restauranteId}")
     public ResponseEntity<?> excluir(@PathVariable Long restauranteId) {
 
-        Restaurante restaurante = restauranteRepository.findById(restauranteId).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-
-        restauranteRepository.delete(restaurante);
-        return ResponseEntity.noContent().build();
+        try {
+            cadastroRestauranteService.excluir(restauranteId);
+            return ResponseEntity.noContent().build();
+        } catch (EntidadeNaoEncontradaException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
 
 
     }
