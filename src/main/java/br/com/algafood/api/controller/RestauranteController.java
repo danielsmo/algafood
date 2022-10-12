@@ -1,6 +1,8 @@
 package br.com.algafood.api.controller;
 
+import br.com.algafood.domain.exception.CozinhaNaoEncontradaException;
 import br.com.algafood.domain.exception.EntidadeNaoEncontradaException;
+import br.com.algafood.domain.exception.NegocioException;
 import br.com.algafood.domain.model.Restaurante;
 import br.com.algafood.domain.repository.RestauranteRepository;
 import br.com.algafood.domain.service.CadastroRestauranteService;
@@ -39,7 +41,11 @@ public class RestauranteController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Restaurante salvar(@RequestBody Restaurante restaurante) {
+        try {
             return cadastroRestauranteService.salvar(restaurante);
+        } catch (CozinhaNaoEncontradaException e) {
+            throw new NegocioException(e.getMessage());
+        }
     }
 
 
@@ -48,9 +54,13 @@ public class RestauranteController {
 
         Restaurante restauranteAtual = cadastroRestauranteService.buscarOuFalhar(restauranteId);
         BeanUtils.copyProperties(restaurante, restauranteAtual,
-                "id","formasPagamento","endereco","dataCadastro","produtos");
+                "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
 
+        try {
             return cadastroRestauranteService.salvar(restauranteAtual);
+        } catch (CozinhaNaoEncontradaException e) {
+            throw new NegocioException(e.getMessage());
+        }
     }
 
     @PatchMapping("/{restauranteId}")

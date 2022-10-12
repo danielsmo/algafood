@@ -1,5 +1,6 @@
 package br.com.algafood.domain.service;
 
+import br.com.algafood.domain.exception.CozinhaNaoEncontradaException;
 import br.com.algafood.domain.exception.EntidadeEmUsoException;
 import br.com.algafood.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algafood.domain.model.Cozinha;
@@ -14,7 +15,6 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class CadastroCozinhaService {
 
-    public static final String COZINHA_NAO_LOCALIZADA = "Cozinha de código %d não foi localizada";
     public static final String COZINHA_EM_USO = "Cozinha de código %d não pode ser removida pois está em uso";
     @Autowired
     private CozinhaRepository cozinhaRepository;
@@ -29,8 +29,7 @@ public class CadastroCozinhaService {
 
     public Cozinha buscarOuFalhar(Long cozinhaId){
         return cozinhaRepository.findById(cozinhaId).orElseThrow(() ->
-                new EntidadeNaoEncontradaException(
-                        String.format(COZINHA_NAO_LOCALIZADA, cozinhaId)));
+                new CozinhaNaoEncontradaException(cozinhaId));
     }
 
 
@@ -39,8 +38,7 @@ public class CadastroCozinhaService {
         try {
             cozinhaRepository.deleteById(cozinhaId);
         } catch (EmptyResultDataAccessException e) {
-            throw new EntidadeNaoEncontradaException(
-                    String.format(COZINHA_NAO_LOCALIZADA, cozinhaId));
+            throw new CozinhaNaoEncontradaException(cozinhaId);
 
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(
