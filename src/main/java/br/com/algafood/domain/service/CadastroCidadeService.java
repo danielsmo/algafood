@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class CadastroCidadeService {
 
+    public static final String CIDADE_NAO_ENCONTRADA = "Cidade de código %d não foi localizada";
+    public static final String ESTADO_NAO_ENCONTRADO = "Estado com id %d não foi encontrado";
     @Autowired
     private CidadeRepository cidadeRepository;
     @Autowired
@@ -21,12 +23,19 @@ public class CadastroCidadeService {
 
         Estado estado = estadoRepository.findById(cidade.getEstado().getId()).orElseThrow(() ->
                 new EntidadeNaoEncontradaException(
-                        String.format("Estado com id %d não foi encontrado", cidade.getEstado().getId())));
+                        String.format(ESTADO_NAO_ENCONTRADO, cidade.getEstado().getId())));
 
 
         cidade.setEstado(estado);
 
         return cidadeRepository.save(cidade);
+    }
+
+
+    public Cidade buscarOuFalhar(Long cidadeId){
+        return cidadeRepository.findById(cidadeId).orElseThrow(() ->
+                new EntidadeNaoEncontradaException(
+                        String.format(CIDADE_NAO_ENCONTRADA, cidadeId)));
     }
 
 
@@ -36,7 +45,7 @@ public class CadastroCidadeService {
             cidadeRepository.deleteById(cidadeId);
         } catch (EmptyResultDataAccessException e) {
             throw new EntidadeNaoEncontradaException(
-                    String.format("Cidade de código %d não foi localizada", cidadeId));
+                    String.format(CIDADE_NAO_ENCONTRADA, cidadeId));
 
         }
 

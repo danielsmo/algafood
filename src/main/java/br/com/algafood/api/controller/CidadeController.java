@@ -27,69 +27,30 @@ public class CidadeController {
     }
 
     @GetMapping("/{cidadeId}")
-    public ResponseEntity<?> buscar(@PathVariable Long cidadeId) {
+    public Cidade buscar(@PathVariable Long cidadeId) {
 
-        Cidade cidade = cidadeRepository.findById(cidadeId).orElse(null);
-
-        if (cidade == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-
-        return ResponseEntity.ok().body(cidade);
-
-
+        return cadastroCidadeService.buscarOuFalhar(cidadeId);
     }
 
-
     @PostMapping
-    public ResponseEntity<?> adicionar(@RequestBody Cidade cidade) {
+    public void adicionar(@RequestBody Cidade cidade) {
 
-        try {
-            cadastroCidadeService.salvar(cidade);
-            return ResponseEntity.status(HttpStatus.CREATED).body(cidade);
-
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-
+       cadastroCidadeService.salvar(cidade);
     }
 
 
     @PutMapping("/{cidadeId}")
-    public ResponseEntity<?> atualizar(@PathVariable Long cidadeId, @RequestBody Cidade cidade) {
+    public Cidade atualizar(@PathVariable Long cidadeId, @RequestBody Cidade cidade) {
 
-        Cidade cidadeAtual = cidadeRepository.findById(cidadeId).orElse(null);
-
-        if (cidadeAtual == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-
+        Cidade cidadeAtual = cadastroCidadeService.buscarOuFalhar(cidadeId);
         BeanUtils.copyProperties(cidade, cidadeAtual, "id");
-
-
-        try {
-            cidadeAtual = cadastroCidadeService.salvar(cidadeAtual);
-            return ResponseEntity.ok().body(cidadeAtual);
-
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+            return cadastroCidadeService.salvar(cidadeAtual);
     }
 
     @DeleteMapping("/{cidadeId}")
-    public ResponseEntity<?> excluir(@PathVariable Long cidadeId) {
+    public void excluir(@PathVariable Long cidadeId) {
 
-        try {
-            cadastroCidadeService.excluir(cidadeId);
-            return ResponseEntity.noContent().build();
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-
-
+      cadastroCidadeService.excluir(cidadeId);
     }
-
 
 }

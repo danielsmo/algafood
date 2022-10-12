@@ -32,16 +32,9 @@ public class CozinhaController {
     }
 
     @GetMapping("/{cozinhaId}")
-    public ResponseEntity<?> buscar(@PathVariable Long cozinhaId) {
+    public Cozinha buscar(@PathVariable Long cozinhaId) {
 
-        Optional<Cozinha> cozinha = cozinhaRepository.findById(cozinhaId);
-
-        if (cozinha.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-
-        return ResponseEntity.ok().body(cozinha.get());
+        return cadastroCozinhaService.buscarOuFalhar(cozinhaId);
 
 
     }
@@ -56,30 +49,19 @@ public class CozinhaController {
     }
 
     @PutMapping("/{cozinhaId}")
-    public ResponseEntity<Cozinha> atualizar(@PathVariable Long cozinhaId, @RequestBody Cozinha cozinha) {
-        Optional<Cozinha> cozinhaAtual = cozinhaRepository.findById(cozinhaId);
+    public Cozinha atualizar(@PathVariable Long cozinhaId, @RequestBody Cozinha cozinha) {
+        Cozinha cozinhaAtual = cadastroCozinhaService.buscarOuFalhar(cozinhaId);
 
-        if (cozinhaAtual.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
 
-        BeanUtils.copyProperties(cozinha, cozinhaAtual.get(), "id");
-        Cozinha cozinhaSalva = cadastroCozinhaService.salvar(cozinhaAtual.get());
-        return ResponseEntity.ok(cozinhaSalva);
+        BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
+        return cadastroCozinhaService.salvar(cozinhaAtual);
+
     }
 
     @DeleteMapping("/{cozinhaId}")
-    public ResponseEntity<?> deletar(@PathVariable Long cozinhaId) {
-
-        try {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar(@PathVariable Long cozinhaId) {
             cadastroCozinhaService.excluir(cozinhaId);
 
-            return ResponseEntity.noContent().build();
-        } catch (EntidadeEmUsoException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-
-        }
     }
 }
