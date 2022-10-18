@@ -1,7 +1,6 @@
 package br.com.algafood.domain.service;
 
 import br.com.algafood.domain.exception.CidadeNaoEncontradaException;
-import br.com.algafood.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algafood.domain.exception.EstadoNaoEncontradoException;
 import br.com.algafood.domain.model.Cidade;
 import br.com.algafood.domain.model.Estado;
@@ -31,7 +30,7 @@ public class CadastroCidadeService {
     }
 
 
-    public Cidade buscarOuFalhar(Long cidadeId){
+    public Cidade buscarOuFalhar(Long cidadeId) {
         return cidadeRepository.findById(cidadeId).orElseThrow(() ->
                 new CidadeNaoEncontradaException(cidadeId));
     }

@@ -1,7 +1,5 @@
 package br.com.algafood.api.controller;
 
-import br.com.algafood.domain.exception.EntidadeEmUsoException;
-import br.com.algafood.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algafood.domain.model.Estado;
 import br.com.algafood.domain.repository.EstadoRepository;
 import br.com.algafood.domain.service.CadastroEstadoService;
@@ -31,7 +29,7 @@ public class EstadoController {
     @GetMapping("/{estadoId}")
     public Estado buscar(@PathVariable Long estadoId) {
 
-       return cadastroEstadoService.buscarOuFalhar(estadoId);
+        return cadastroEstadoService.buscarOuFalhar(estadoId);
 
 
     }

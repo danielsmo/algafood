@@ -1,7 +1,6 @@
 package br.com.algafood.domain.service;
 
 import br.com.algafood.domain.exception.CozinhaNaoEncontradaException;
-import br.com.algafood.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algafood.domain.exception.RestauranteNaoEncontradoException;
 import br.com.algafood.domain.model.Cozinha;
 import br.com.algafood.domain.model.Restaurante;
@@ -33,7 +32,7 @@ public class CadastroRestauranteService {
 
     }
 
-    public Restaurante buscarOuFalhar(Long restauranteId){
+    public Restaurante buscarOuFalhar(Long restauranteId) {
         return restauranteRepository.findById(restauranteId).orElseThrow(() ->
                 new RestauranteNaoEncontradoException(restauranteId));
     }

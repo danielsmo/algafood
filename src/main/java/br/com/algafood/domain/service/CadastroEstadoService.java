@@ -1,7 +1,6 @@
 package br.com.algafood.domain.service;
 
 import br.com.algafood.domain.exception.EntidadeEmUsoException;
-import br.com.algafood.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algafood.domain.exception.EstadoNaoEncontradoException;
 import br.com.algafood.domain.model.Estado;
 import br.com.algafood.domain.repository.EstadoRepository;
@@ -18,14 +17,12 @@ public class CadastroEstadoService {
     private EstadoRepository estadoRepository;
 
 
-
-
     public Estado salvar(Estado estado) {
         return estadoRepository.save(estado);
     }
 
 
-    public Estado buscarOuFalhar(Long estadoId){
+    public Estado buscarOuFalhar(Long estadoId) {
         return estadoRepository.findById(estadoId).orElseThrow(() ->
                 new EstadoNaoEncontradoException(estadoId));
     }

@@ -1,6 +1,5 @@
 package br.com.algafood.api.controller;
 
-import br.com.algafood.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algafood.domain.exception.EstadoNaoEncontradoException;
 import br.com.algafood.domain.exception.NegocioException;
 import br.com.algafood.domain.model.Cidade;
@@ -9,7 +8,6 @@ import br.com.algafood.domain.service.CadastroCidadeService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,7 +37,7 @@ public class CidadeController {
 
         try {
             cadastroCidadeService.salvar(cidade);
-        } catch (EstadoNaoEncontradoException e){
+        } catch (EstadoNaoEncontradoException e) {
             throw new NegocioException(e.getMessage());
         }
     }
@@ -58,9 +56,10 @@ public class CidadeController {
     }
 
     @DeleteMapping("/{cidadeId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void excluir(@PathVariable Long cidadeId) {
 
-      cadastroCidadeService.excluir(cidadeId);
+        cadastroCidadeService.excluir(cidadeId);
     }
 
 }

@@ -47,7 +47,7 @@ public class Restaurante {
     private LocalDateTime dataCadastro;
 
     @UpdateTimestamp
-    @Column(nullable = false,columnDefinition = "datetime")
+    @Column(nullable = false, columnDefinition = "datetime")
     private LocalDateTime dataAtualizacao;
 
     public Long getId() {

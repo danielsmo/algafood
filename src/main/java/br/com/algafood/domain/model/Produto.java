@@ -2,7 +2,6 @@ package br.com.algafood.domain.model;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.List;
 
 @Entity
 public class Produto {

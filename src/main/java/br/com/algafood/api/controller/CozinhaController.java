@@ -1,7 +1,5 @@
 package br.com.algafood.api.controller;
 
-import br.com.algafood.domain.exception.EntidadeEmUsoException;
-import br.com.algafood.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algafood.domain.model.Cozinha;
 import br.com.algafood.domain.repository.CozinhaRepository;
 import br.com.algafood.domain.service.CadastroCozinhaService;
@@ -12,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/cozinhas")
@@ -61,7 +58,7 @@ public class CozinhaController {
     @DeleteMapping("/{cozinhaId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletar(@PathVariable Long cozinhaId) {
-            cadastroCozinhaService.excluir(cozinhaId);
+        cadastroCozinhaService.excluir(cozinhaId);
 
     }
 }

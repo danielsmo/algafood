@@ -1,7 +1,6 @@
 package br.com.algafood.api.controller;
 
 import br.com.algafood.domain.exception.CozinhaNaoEncontradaException;
-import br.com.algafood.domain.exception.EntidadeNaoEncontradaException;
 import br.com.algafood.domain.exception.NegocioException;
 import br.com.algafood.domain.model.Restaurante;
 import br.com.algafood.domain.repository.RestauranteRepository;
@@ -10,7 +9,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +32,7 @@ public class RestauranteController {
 
     @GetMapping("/{restauranteId}")
     public Restaurante buscar(@PathVariable Long restauranteId) {
-       return cadastroRestauranteService.buscarOuFalhar(restauranteId);
+        return cadastroRestauranteService.buscarOuFalhar(restauranteId);
     }
 
 
@@ -76,7 +74,7 @@ public class RestauranteController {
     @DeleteMapping("/{restauranteId}")
     public void excluir(@PathVariable Long restauranteId) {
 
-            cadastroRestauranteService.excluir(restauranteId);
+        cadastroRestauranteService.excluir(restauranteId);
     }
 
 

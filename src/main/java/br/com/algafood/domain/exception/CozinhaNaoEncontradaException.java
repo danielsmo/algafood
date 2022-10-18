@@ -4,7 +4,7 @@ public class CozinhaNaoEncontradaException extends EntidadeNaoEncontradaExceptio
 
     public CozinhaNaoEncontradaException(Long cozinhaId) {
         this(String.format(
-                "A Cozinha de código %d não foi localizada",cozinhaId));
+                "A Cozinha de código %d não foi localizada", cozinhaId));
     }
 
     public CozinhaNaoEncontradaException(String message) {
